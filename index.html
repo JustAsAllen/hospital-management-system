@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MedFlow — Hospital Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- ══════════ ANIMATED BACKGROUND ══════════ -->
+<div class="bg-orb orb-a"></div>
+<div class="bg-orb orb-b"></div>
+<div class="bg-orb orb-c"></div>
+
+<!-- ══════════ AUTH SCREEN ══════════ -->
+<div id="auth-screen" class="auth-screen">
+  <div class="auth-card glass">
+    <div class="auth-brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L10 3l-3 9H2"/></svg>
+      </div>
+      <h1>MedFlow</h1>
+      <p>Hospital Management System</p>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login">Sign In</button>
+      <button class="auth-tab" data-tab="signup">Sign Up</button>
+    </div>
+
+    <form id="login-form" class="auth-form active-form" novalidate>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="you@hospital.com" required />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" required />
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+    </form>
+
+    <form id="signup-form" class="auth-form" novalidate>
+      <div class="field">
+        <label>Full Name</label>
+        <input type="text" id="signup-name" placeholder="Dr. Jane Smith" required />
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="signup-email" placeholder="you@hospital.com" required />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="signup-password" placeholder="At least 8 characters" required />
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+    </form>
+
+    <button id="demo-login" class="btn btn-ghost btn-block">Enter as Demo Admin →</button>
+
+    <p class="auth-hint" id="auth-hint"></p>
+  </div>
+</div>
+
+<!-- ══════════ MAIN APP ══════════ -->
+<div id="app" class="app hidden">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L10 3l-3 9H2"/></svg>
+      </div>
+      <div>
+        <span class="sidebar-brand-name">MedFlow</span>
+        <span class="sidebar-brand-sub">Hospital System</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-view="dashboard">
+        <svg viewBox="0 0 24 24"><path d="M3 3h8v8H3zM13 3h8v5h-8zM13 12h8v9h-8zM3 15h8v6H3z"/></svg>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-item" data-view="patients">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Patients</span>
+      </button>
+      <button class="nav-item" data-view="doctors">
+        <svg viewBox="0 0 24 24"><path d="M20 10c0 4.4-3.6 8-8 8s-8-3.6-8-8 3.6-8 8-8 8 3.6 8 8z"/><path d="M12 19v3M12 8v3M10.5 9.5h3"/></svg>
+        <span>Doctors</span>
+      </button>
+      <button class="nav-item" data-view="appointments">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M9 16l2 2 4-4"/></svg>
+        <span>Appointments</span>
+        <span class="nav-badge" id="nav-badge-appts">0</span>
+      </button>
+      <button class="nav-item" data-view="billing">
+        <svg viewBox="0 0 24 24"><path d="M6 2h12M6 22h12"/><path d="M7 8h10M7 12h10M7 16h10"/></svg>
+        <span>Billing</span>
+      </button>
+      <button class="nav-item" data-view="settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar" id="user-avatar">DR</div>
+        <div class="user-meta">
+          <strong id="user-name">—</strong>
+          <span id="user-role">—</span>
+        </div>
+        <button id="logout-btn" class="logout-btn" title="Sign out">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar glass">
+      <button id="mobile-menu" class="icon-btn mobile-only">
+        <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="global-search" placeholder="Search patients, doctors, appointments…" />
+      </div>
+      <div class="topbar-right">
+        <div class="mode-pill" id="mode-pill"><span class="dot"></span><span id="mode-label">Demo Mode</span></div>
+        <button class="icon-btn" id="add-quick" title="Quick add">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="avatar-stack" id="avatar-stack"></div>
+      </div>
+    </header>
+
+    <!-- ───── DASHBOARD ───── -->
+    <section id="view-dashboard" class="view active-view">
+      <div class="view-head">
+        <div>
+          <h1 class="view-title">Dashboard</h1>
+          <p class="view-sub" id="greeting">Welcome back</p>
+        </div>
+        <button class="btn btn-primary" data-open-modal="appointment">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          New Appointment
+        </button>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card glass">
+          <div class="stat-icon gradient-blue"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div><span class="stat-label">Total Patients</span><strong class="stat-value" id="stat-patients">0</strong><span class="stat-trend up" id="stat-patients-trend">+12% this month</span></div>
+        </div>
+        <div class="stat-card glass">
+          <div class="stat-icon gradient-teal"><svg viewBox="0 0 24 24"><path d="M20 10c0 4.4-3.6 8-8 8s-8-3.6-8-8 3.6-8 8-8 8 3.6 8 8z"/><path d="M12 19v3M12 8v3M10.5 9.5h3"/></svg></div>
+          <div><span class="stat-label">Doctors</span><strong class="stat-value" id="stat-doctors">0</strong><span class="stat-trend">On staff</span></div>
+        </div>
+        <div class="stat-card glass">
+          <div class="stat-icon gradient-amber"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M9 16l2 2 4-4"/></svg></div>
+          <div><span class="stat-label">Appointments</span><strong class="stat-value" id="stat-appts">0</strong><span class="stat-trend up" id="stat-appts-label">Scheduled</span></div>
+        </div>
+        <div class="stat-card glass">
+          <div class="stat-icon gradient-pink"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <div><span class="stat-label">Monthly Revenue (INR)</span><strong class="stat-value" id="stat-revenue">₹0</strong><span class="stat-trend up" id="stat-revenue-trend">Collected</span></div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="glass panel">
+          <div class="panel-head">
+            <h3>Weekly Activity</h3>
+            <button class="chip-btn" id="chart-range">Last 7 days</button>
+          </div>
+          <canvas id="activity-chart" height="220"></canvas>
+        </div>
+        <div class="glass panel">
+          <div class="panel-head">
+            <h3>Today's Appointments</h3>
+            <button class="link-btn" data-goto="appointments">View all</button>
+          </div>
+          <div id="today-list" class="appt-list">
+            <div class="skeleton-row"></div>
+            <div class="skeleton-row"></div>
+            <div class="skeleton-row"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="glass panel">
+          <div class="panel-head">
+            <h3>Recent Patients</h3>
+            <button class="link-btn" data-goto="patients">View all</button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Patient</th><th>Age / Gender</th><th>Blood</th><th>Phone</th></tr></thead>
+              <tbody id="recent-patients"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="glass panel">
+          <div class="panel-head">
+            <h3>Department Breakdown</h3>
+            <button class="chip-btn" id="chart-range2">Doctors</button>
+          </div>
+          <div id="dept-chart" class="dept-chart"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── PATIENTS ───── -->
+    <section id="view-patients" class="view">
+      <div class="view-head">
+        <div>
+          <h1 class="view-title">Patients</h1>
+          <p class="view-sub">Manage patient records</p>
+        </div>
+        <button class="btn btn-primary" data-open-modal="patient">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          Add Patient
+        </button>
+      </div>
+      <div class="glass panel">
+        <div class="table-toolbar">
+          <div class="search-wrap small"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" id="patient-search" placeholder="Filter patients…" /></div>
+          <div class="filter-chips" id="patient-filters"></div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Patient</th><th>Age</th><th>Gender</th><th>Blood Group</th><th>Phone</th><th>Actions</th></tr></thead>
+            <tbody id="patients-table"></tbody>
+          </table>
+        </div>
+        <p class="empty-state hidden" id="patients-empty">No patients found. Add your first one →</p>
+      </div>
+    </section>
+
+    <!-- ───── DOCTORS ───── -->
+    <section id="view-doctors" class="view">
+      <div class="view-head">
+        <div>
+          <h1 class="view-title">Doctors</h1>
+          <p class="view-sub">Manage the medical team</p>
+        </div>
+        <button class="btn btn-primary" data-open-modal="doctor">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          Add Doctor
+        </button>
+      </div>
+      <div class="doctor-grid" id="doctor-grid"></div>
+    </section>
+
+    <!-- ───── APPOINTMENTS ───── -->
+    <section id="view-appointments" class="view">
+      <div class="view-head">
+        <div>
+          <h1 class="view-title">Appointments</h1>
+          <p class="view-sub">Schedule and manage visits</p>
+        </div>
+        <button class="btn btn-primary" data-open-modal="appointment">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          New Appointment
+        </button>
+      </div>
+      <div class="appt-filter-bar glass">
+        <div class="filter-chips" id="appt-status-filters">
+          <button class="chip active" data-status="all">All</button>
+          <button class="chip" data-status="scheduled">Scheduled</button>
+          <button class="chip" data-status="completed">Completed</button>
+          <button class="chip" data-status="cancelled">Cancelled</button>
+        </div>
+      </div>
+      <div class="appt-card-grid" id="appt-grid"></div>
+      <p class="empty-state hidden" id="appts-empty">No appointments here yet.</p>
+    </section>
+
+    <!-- ───── BILLING ───── -->
+    <section id="view-billing" class="view">
+      <div class="view-head">
+        <div>
+          <h1 class="view-title">Billing</h1>
+          <p class="view-sub">Invoices and payments</p>
+        </div>
+        <button class="btn btn-primary" data-open-modal="invoice">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          New Invoice
+        </button>
+      </div>
+      <div class="glass panel">
+        <div class="table-toolbar">label</div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Invoice</th><th>Patient</th><th>Description</th><th>Amount</th><th>Status</th><th></th></tr></thead>
+            <tbody id="invoices-table"></tbody>
+          </table>
+        </div>
+        <p class="empty-state hidden" id="invoices-empty">No invoices yet.</p>
+      </div>
+    </section>
+
+    <!-- ───── SETTINGS ───── -->
+    <section id="view-settings" class="view">
+      <div class="view-head">
+        <div>
+          <h1 class="view-title">Settings</h1>
+          <p class="view-sub">System configuration</p>
+        </div>
+      </div>
+      <div class="settings-grid">
+        <div class="glass panel">
+          <div class="panel-head"><h3>Supabase Connection</h3><span class="badge" id="conn-badge">Not connected</span></div>
+          <p class="muted">Connect your Supabase project to persist data to the cloud. Generate an <code>anon</code> key and your project URL from <b>Supabase Dashboard → Settings → API</b>.</p>
+          <label class="field"><span>Project URL</span><input type="text" id="set-url" placeholder="https://xxxx.supabase.co" /></label>
+          <label class="field"><span>Anon Key</span><input type="text" id="set-key" placeholder="eyJhbGciOi…" /></label>
+          <div class="split">
+            <button class="btn btn-primary" id="save-supabase">Connect &amp; Save</button>
+            <button class="btn btn-ghost" id="disconnect-supabase">Disconnect</button>
+          </div>
+        </div>
+        <div class="glass panel">
+          <div class="panel-head"><h3>Hospital Profile</h3><span class="badge">Local</span></div>
+          <label class="field"><span>Hospital Name</span><input type="text" id="set-hospital" placeholder="City General Hospital" /></label>
+          <label class="field"><span>Demo / Offline Mode</span>
+            <div class="toggle-row"><span id="demo-status">On</span><label class="switch"><input type="checkbox" id="set-demo" checked /><span class="slider"></span></label></div>
+          </label>
+          <button class="btn btn-primary" id="save-hospital">Save Profile</button>
+        </div>
+        <div class="glass panel">
+          <div class="panel-head"><h3>Data &amp; Setup</h3></div>
+          <p class="muted">Load Indian sample records (patients, doctors, appointments, invoices) with one click, or wipe everything for a clean slate. It never duplicates — safe to re-run.</p>
+          <div class="split">
+            <button class="btn btn-primary" id="seed-data">
+              <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              Seed sample data
+            </button>
+            <button class="btn btn-ghost" id="export-data">Export Data (JSON)</button>
+          </div>
+          <div class="split" style="margin-top:10px">
+            <button class="btn btn-danger-ghost" id="reset-data">Wipe All Data</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ══════════ MODALS ══════════ -->
+<div class="modal-overlay hidden" id="modal-patient">
+  <div class="modal glass">
+    <div class="modal-head">
+      <h3 id="modal-patient-title">Add Patient</h3>
+      <button class="icon-btn modal-close" data-close-modal="patient"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <form id="patient-form" class="modal-form">
+      <input type="hidden" id="pf-id" />
+      <div class="form-row">
+        <label class="field"><span>First Name</span><input type="text" id="pf-first" required placeholder="John" /></label>
+        <label class="field"><span>Last Name</span><input type="text" id="pf-last" required placeholder="Doe" /></label>
+      </div>
+      <div class="form-row">
+        <label class="field"><span>Date of Birth</span><input type="date" id="pf-dob" required /></label>
+        <label class="field"><span>Gender</span><select id="pf-gender"><option>Male</option><option>Female</option><option>Other</option></select></label>
+      </div>
+      <div class="form-row">
+        <label class="field"><span>Blood Group</span><select id="pf-blood"><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></label>
+        <label class="field"><span>Phone</span><input type="tel" id="pf-phone" placeholder="+1 555 000 1234" /></label>
+      </div>
+      <label class="field"><span>Email</span><input type="email" id="pf-email" placeholder="john@example.com" /></label>
+      <label class="field"><span>Address</span><input type="text" id="pf-address" placeholder="123 Main St" /></label>
+      <label class="field"><span>Allergies</span><input type="text" id="pf-allergies" placeholder="Penicillin, peanuts…" /></label>
+      <label class="field"><span>Medical Notes</span><textarea id="pf-notes" rows="2" placeholder="Diagnosis, history…"></textarea></label>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-ghost" data-close-modal="patient">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Patient</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="modal-doctor">
+  <div class="modal glass">
+    <div class="modal-head">
+      <h3 id="modal-doctor-title">Add Doctor</h3>
+      <button class="icon-btn modal-close" data-close-modal="doctor"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <form id="doctor-form" class="modal-form">
+      <input type="hidden" id="df-id" />
+      <div class="form-row">
+        <label class="field"><span>First Name</span><input type="text" id="df-first" required placeholder="Jane" /></label>
+        <label class="field"><span>Last Name</span><input type="text" id="df-last" required placeholder="Smith" /></label>
+      </div>
+      <div class="form-row">
+        <label class="field"><span>Specialty</span><select id="df-specialty">
+          <option>Cardiology</option><option>Neurology</option><option>Pediatrics</option><option>Orthopedics</option>
+          <option>Dermatology</option><option>General Medicine</option><option>Radiology</option><option>Oncology</option><option>Emergency</option><option>Psychiatry</option>
+        </select></label>
+        <label class="field"><span>Consultation Fee</span><input type="number" id="df-fee" min="0" step="1" placeholder="150" /></label>
+      </div>
+      <div class="form-row">
+        <label class="field"><span>Phone</span><input type="tel" id="df-phone" placeholder="+1 555 000 5678" /></label>
+        <label class="field"><span>Email</span><input type="email" id="df-email" placeholder="jane@hospital.com" /></label>
+      </div>
+      <label class="field"><span>License No.</span><input type="text" id="df-license" placeholder="MD-12345" /></label>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-ghost" data-close-modal="doctor">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Doctor</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="modal-appointment">
+  <div class="modal glass">
+    <div class="modal-head">
+      <h3 id="modal-appointment-title">New Appointment</h3>
+      <button class="icon-btn modal-close" data-close-modal="appointment"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <form id="appointment-form" class="modal-form">
+      <input type="hidden" id="af-id" />
+      <label class="field"><span>Patient</span><select id="af-patient" required></select></label>
+      <label class="field"><span>Doctor</span><select id="af-doctor" required></select></label>
+      <div class="form-row">
+        <label class="field"><span>Date</span><input type="date" id="af-date" required /></label>
+        <label class="field"><span>Time</span><input type="time" id="af-time" required /></label>
+      </div>
+      <label class="field"><span>Status</span><select id="af-status"><option value="scheduled">Scheduled</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select></label>
+      <label class="field"><span>Reason / Notes</span><textarea id="af-reason" rows="2" placeholder="Follow-up checkup…"></textarea></label>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-ghost" data-close-modal="appointment">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Appointment</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="modal-invoice">
+  <div class="modal glass">
+    <div class="modal-head">
+      <h3 id="modal-invoice-title">New Invoice</h3>
+      <button class="icon-btn modal-close" data-close-modal="invoice"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <form id="invoice-form" class="modal-form">
+      <input type="hidden" id="ivf-id" />
+      <label class="field"><span>Patient</span><select id="ivf-patient" required></select></label>
+      <label class="field"><span>Description</span><input type="text" id="ivf-desc" required placeholder="Consultation, Surgery, Lab tests…" /></label>
+      <div class="form-row">
+        <label class="field"><span>Amount (₹)</span><input type="number" id="ivf-amount" required min="0" step="0.01" placeholder="1500.00" /></label>
+        <label class="field"><span>Status</span><select id="ivf-status"><option value="unpaid">Unpaid</option><option value="paid">Paid</option><option value="overdue">Overdue</option></select></label>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-ghost" data-close-modal="invoice">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Invoice</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="modal-patient-details">
+  <div class="modal glass modal-lg">
+    <div class="modal-head">
+      <h3>Patient Profile</h3>
+      <button class="icon-btn modal-close" data-close-modal="patient-details"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div id="patient-detail-body"></div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="modal-confirm">
+  <div class="modal glass modal-sm">
+    <div class="modal-head">
+      <h3 id="confirm-title">Are you sure?</h3>
+    </div>
+    <p class="modal-text" id="confirm-text"></p>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="confirm-cancel">Cancel</button>
+      <button class="btn btn-danger" id="confirm-ok">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOASTS ══════════ -->
+<div id="toasts" class="toasts"></div>
+<div id="toast-template" class="toast hidden"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
